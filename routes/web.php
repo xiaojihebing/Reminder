@@ -18,13 +18,13 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
-Route::get('/check', 'CheckController@index');
-Route::get('/go', 'TestController@index');
+Route::get('/check', 'LantouziController@index');
+Route::get('/go', 'LantouziController@index');
 
 Route::group(['middleware' => 'auth', 'namespace' => 'Admin', 'prefix' => 'admin'], function() {
     Route::get('/', 'HomeController@index');
     // Route::get('products', 'ProductController@index');
-    Route::resource('rfqs', 'ArticleController');
+    Route::resource('lantouzi', 'ArticleController');
     Route::resource('task', 'TaskController');
 });
 

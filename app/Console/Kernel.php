@@ -14,6 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //
+        Commands\CheckRfq::class,
+        Commands\CheckLan::class,
     ];
 
     /**

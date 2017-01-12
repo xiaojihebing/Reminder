@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
         //
         Commands\CheckRfq::class,
         Commands\CheckLan::class,
+        Commands\CheckJdstock::class,
     ];
 
     /**
@@ -28,6 +29,8 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+        // 每10分钟查询京东库存
+        $schedule->command('check:jdstock --force')->everyTenMinutes();
     }
 
     /**

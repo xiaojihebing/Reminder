@@ -26,16 +26,6 @@ Route::group(['middleware' => 'auth', 'namespace' => 'Admin', 'prefix' => 'admin
     // Route::get('products', 'ProductController@index');
     Route::resource('lantouzi', 'ArticleController');
     Route::resource('task', 'TaskController');
+    Route::resource('jingdong', 'JingdongController');
 });
 
-Auth::routes();
-
-Route::get('/home', 'HomeController@index');
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index');
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index');

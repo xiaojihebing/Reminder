@@ -32,6 +32,7 @@ class Kernel extends ConsoleKernel
         // 每10分钟查询京东库存
         $schedule->command('check:jdstock')->everyTenMinutes();
         $schedule->command('check:rfq')->everyMinute();
+        $schedule->command('check:lan')->everyFiveMinutes();
     }
 
     /**

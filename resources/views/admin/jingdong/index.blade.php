@@ -23,6 +23,7 @@
                           <th>提醒类型</th>
                           <th>间隔(s)</th>
                           <th>状态</th>
+                          <th>上次查询</th>
                           <th>操作</th>
                         </tr>
                       </thead>
@@ -39,6 +40,7 @@
                           @if ($jd->status === 0) <td>已停止</td>
                           @else <td>运行中</td>
                           @endif
+                          <td>{{ $jd->updated_at }}</td>
                           <td>
                             <a href="{{ url('admin/jingdong/'.$jd->id.'/edit') }}" class="btn btn-success">编辑</a>
                             <form action="{{ url('admin/jingdong/'.$jd->id) }}" method="POST" style="display: inline;">

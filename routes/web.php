@@ -18,14 +18,15 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
-Route::get('/check', 'LantouziController@index');
-Route::get('/go', 'LantouziController@index');
+// Route::get('/check', 'LantouziController@index');
+// Route::get('/go', 'LantouziController@index');
 
 Route::group(['middleware' => 'auth', 'namespace' => 'Admin', 'prefix' => 'admin'], function() {
     Route::get('/', 'HomeController@index');
     // Route::get('products', 'ProductController@index');
     Route::resource('lantouzi', 'ArticleController');
-    Route::resource('task', 'TaskController');
     Route::resource('jingdong', 'JingdongController');
+    Route::resource('rfq', 'RfqController');
+
 });
 

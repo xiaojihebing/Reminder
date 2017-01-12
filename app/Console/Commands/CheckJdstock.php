@@ -67,14 +67,13 @@ class CheckJdstock extends Command
                     // echo "sucess";
                     
                     // 改变status，停止查货
-                    $jingdong = new Jingdong;
-                    $jingdong->status = 0;
-                    $jingdong->save();
-                }
-
-                // 更新时间
-                $jd->updated_at = time();
-                $jd->save();
+                    $jd->status = 0;
+                    $jd->save();
+                } else {
+                    // 更新时间
+                    $jd->updated_at = time();
+                    $jd->save();
+                }                
             }
         }
     }

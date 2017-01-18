@@ -27,6 +27,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'Admin', 'prefix' => 'admin
     Route::resource('lantouzi', 'ArticleController');
     Route::resource('jingdong', 'JingdongController');
     Route::resource('rfq', 'RfqController');
+    Route::resource('smzdm', 'SmzdmController');
 
 });
 

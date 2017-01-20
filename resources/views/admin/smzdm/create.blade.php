@@ -24,6 +24,12 @@
                             <label class="radio-inline">
                                 <input type="radio" name="type" id="inlineRadio2" value="1"> 类目
                             </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="type" id="inlineRadio3" value="2"> 商城
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="type" id="inlineRadio4" value="3"> 关键词
+                            </label>
                         </div>
                         <input type="text" name="name" class="form-control" required="required" placeholder="任务名称">
                         <br>

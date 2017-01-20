@@ -33,8 +33,12 @@
                           <td>{{ $task->name }}</td>
                           @if($task->type === 0)
                           <td>品牌</td>
-                          @else
+                          @elseif($task->type === 1)
                           <td>类目</td>
+                          @elseif($task->type === 2)
+                          <td>商城</td>
+                          @else
+                          <td>关键词</td>
                           @endif
                           <td>{{ $task->rate }}</td>
                           @if($task->status === 1)

@@ -7,7 +7,7 @@
 <body>
   <p></p>
   <p></p>
-  <p><a href="https://item.jd.com/{{ $skuid }}.html" target="_blank">点击查看</a></p>
+  <p><a href="http://wq.jd.com/item/view?sku={{ $skuid }}" target="_blank">点击查看</a></p>
   <p></p>
 </body>
 </html>

@@ -16,7 +16,7 @@ class Kernel extends ConsoleKernel
         //
         Commands\CheckRfq::class,
         Commands\CheckLan::class,
-        Commands\CheckJdstock::class,
+        Commands\CheckJd::class,
         Commands\CheckSmzdm::class,
     ];
 

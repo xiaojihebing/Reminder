@@ -30,7 +30,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
-        $schedule->command('check:jdstock')->everyTenMinutes();
+        $schedule->command('check:jd')->everyTenMinutes();
         $schedule->command('check:rfq')->everyMinute();
         $schedule->command('check:lan')->everyFiveMinutes();
         $schedule->command('check:smzdm')->everyFiveMinutes();

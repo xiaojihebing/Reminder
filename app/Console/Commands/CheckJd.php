@@ -6,7 +6,7 @@ use App\Jingdong;
 use App\Jobs\SendReminderEmail;
 use Illuminate\Console\Command;
 
-class CheckJdstock extends Command
+class CheckJd extends Command
 {
     /**
      * The name and signature of the console command.
@@ -59,8 +59,7 @@ class CheckJdstock extends Command
 
                             $data = [
                             'tmpl'=>'emails.jdstock',
-                            'name'=>$jd->name,
-                            'skuid'=>$jd->skuid,
+                            'skuid'=>'' . $jd->skuid,
                             'subject'=>$subject,
                             'mail_to'=>'gongxi@sooga.cn'
                             ];
@@ -91,13 +90,12 @@ class CheckJdstock extends Command
 
                             $data = [
                             'tmpl'=>'emails.jdstock',
-                            'name'=>$jd->name,
-                            'skuid'=>$jd->skuid,
+                            'skuid'=>'' . $jd->skuid,
                             'subject'=>$subject,
                             'mail_to'=>'gongxi@sooga.cn'
                             ];
-                            $job = new SendReminderEmail($data);
-                            dispatch($job);// echo "sucess";
+                            // $job = new SendReminderEmail($data);
+                            dispatch(new SendReminderEmail($data));// echo "sucess";
                             
                             // 改变status，停止查询
                             $jd->status = 0;

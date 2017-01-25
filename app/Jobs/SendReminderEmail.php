@@ -39,11 +39,13 @@ class SendReminderEmail implements ShouldQueue
     {
         // 发送邮件
         // $data = ['title'=>$this->title, 'content'=>$this->content, 'rfq_id'=>$this->rfq_id];
-        Mail::send($this->data['tmpl'], $this->data, function ($message) {
+        $data = $this->data;
+        Mail::send($data['tmpl'], $data, function ($message) use($data){
             $message->from('16655376@qq.com', 'Reminder');
-            $message->subject($this->data['subject']);
-            $message->to($this->data['mail_to']);
+            $message->subject($data['subject']);
+            $message->to($data['mail_to']);
         });
-        sleep(30);
+        Mail::getSwiftMailer()->getTransport()->stop();
+        sleep(3);
     }
 }

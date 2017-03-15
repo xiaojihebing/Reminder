@@ -48,29 +48,29 @@ class CheckRfq extends Command
                 // echo $task->taskname . "\r\n";
                 //待采集的目标页面
                 $url = 'https://sourcing.alibaba.com/rfq_search_list.htm?searchText='.str_replace(' ','+',$task->keyword).'&recently=Y';
-                phpQuery::newDocumentFile($url);
+                preg_match_all('/data.push\(([\s\S]*?)\)\;/i', file_get_contents($url), $lists);
         
-                //选择要采集的范围
-                $artlist = pq(".list .item");
                 // $a = 0;
-                foreach($artlist as $li){
-                    $temp = pq(pq($li)->find('.rfq-btn'))->attr('url');
-                    // echo $temp;
-                    $m = preg_match('/\d{10}/i',$temp,$result);
-                    $n = Rfq::where('rfq_id', $result[0])->first();
-                    if ($m && !$n) {
+                foreach($lists[1] as $li){
+                    preg_match_all('/:(.*?),\r/i', str_replace(["\"", "decodeEntities", "(", ")"],"", $li), $result);
+                    preg_match('/\d{10}/i', $result[1][11], $rfq_id);
+
+                    if (!Rfq::where('rfq_id', $rfq_id[0])->first()) {
+                        echo $rfq_id[0]."\r\n";
+                        echo "http:".trim($result[1][0])."\r\n";
+                        echo trim(strip_tags($result[1][1]))."\r\n";
+                        echo trim(strip_tags($this->hextostr($result[1][3])))."\r\n";
+                        echo $result[1][4]."\r\n";
+                        echo $result[1][6].$result[1][7]."\r\n";
+
                         $rfq = new Rfq;
-                        $rfq->rfq_id = $rfq_id = $result[0];;
-                        $rfq->title = $title = trim(pq($li)->find('.item-title a')->text());
-                        $rfq->desc = $content = trim(pq($li)->find('.item-digest')->text());
-                        $rfq->quantity = $quantity = pq(pq($li)->find('.item-other-count span'))->attr('title');
-
-                        $temp = pq(pq($li)->find('.item-info'))->attr('title');
-                        preg_match('/\d{4}-\d{1,2}-\d{1,2}/i',$temp,$postdate);
-                        $rfq->postdate = $postdate[0];
-
-                        $rfq->country = $country = pq(pq($li)->find('.country-flag'))->attr('title');
-                        $rfq->reached = pq($li)->find('.item-action-left span')->text();
+                        $rfq->rfq_id = $rfq_id = $rfq_id[0];
+                        $rfq->title = $title = trim(strip_tags($result[1][1]));
+                        $rfq->desc = $content = trim(strip_tags($this->hextostr($result[1][3])));
+                        $rfq->quantity = $quantity = $result[1][6]." ".$result[1][7];
+                        $rfq->postdate = $result[1][8];
+                        $rfq->country = $country = $result[1][4];
+                        $rfq->reached = "Reached";
                         $rfq->related = $task->keyword;
                         $rfq->save();
                         // echo $result[0] ."\r\n";
@@ -99,5 +99,12 @@ class CheckRfq extends Command
             }
         }
         echo $a;
+    }
+    // 将16进制转义转换为字符
+    public function hextostr($hex)
+    {
+        return preg_replace_callback('/\\\x([0-9a-fA-F]{2})/', function($matches) {
+            return chr(hexdec($matches[1]));
+        }, $hex);
     }
 }

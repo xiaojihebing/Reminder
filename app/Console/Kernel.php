@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel
         Commands\CheckLan::class,
         Commands\CheckJd::class,
         Commands\CheckSmzdm::class,
+        Commands\CheckTest::class,
     ];
 
     /**

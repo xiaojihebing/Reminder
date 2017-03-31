@@ -84,7 +84,7 @@ class CheckRfq extends Command
                         'subject'=>$subject,
                         'content'=>$content,
                         'country'=>$country,
-                        'mail_to'=>'colin@3gxun.com'
+                        'mail_to'=>'colin@mail.sooga.cn'
                         ];
                         $job = new SendReminderEmail($data);
                         dispatch($job);

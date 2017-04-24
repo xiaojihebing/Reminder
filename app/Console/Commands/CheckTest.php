@@ -43,28 +43,34 @@ class CheckTest extends Command
         $url = 'https://sourcing.alibaba.com/rfq_search_list.htm?searchText=usb+cable'; //.str_replace(' ','+',$task->keyword).'&recently=Y';
         // $res= file_get_contents($url);
         preg_match_all('/data.push\(([\s\S]*?)\)\;/i', file_get_contents($url), $lists);
-        // print_r($lists[1]);
         $i = 1;
+
+        // print_r($lists);die;
 
         foreach($lists[1] as $li){
 
             preg_match_all('/:(.*?),\r/i', str_replace(["\"", "decodeEntities", "(", ")"],"", $li), $rfq);
-            if (preg_match('/\d{10}/i', $rfq[1][11], $rfq_id)) {
-                echo $i."\r\n";
-                echo $rfq_id[0]."\r\n";
-                echo "http:".trim($rfq[1][0])."\r\n";
-                echo trim(strip_tags($rfq[1][1]))."\r\n";
-                echo trim(strip_tags($this->hextostr($rfq[1][3])))."\r\n";
-                echo $rfq[1][4]."\r\n";
-                echo $rfq[1][6].$rfq[1][7]."\r\n";
+            // print_r($rfq[1]);die;
+            // echo substr(str_replace('\x2', '', $rfq[1][1]), 0, 24) . "\r\n";
+            $rfq_id = trim(str_replace(['\x2d','\x2a'], ['-','*'], $rfq[1][1]));
+            echo $rfq_id."\r\n";
+            // str_replace("\x2","",$rfq[1][1]);
+            // if (preg_match('/\d{10}/i', $rfq[1][1], $rfq_id)) {
+            //     echo $i."\r\n";
+            //     echo $rfq_id[0]."\r\n";
+            //     echo "http:".trim($rfq[1][0])."\r\n";
+            //     echo trim(strip_tags($rfq[1][1]))."\r\n";
+            //     echo trim(strip_tags($this->hextostr($rfq[1][3])))."\r\n";
+            //     echo $rfq[1][4]."\r\n";
+            //     echo $rfq[1][6].$rfq[1][7]."\r\n";
 
-                echo "\r\n";
-                $i++;
-            } else {
-                echo "error";
-            }
+            //     echo "\r\n";
+            //     $i++;
+            // } else {
+            //     echo "error";
+            // }
             
-            echo "-------------------------------------------------------------------------"."\r\n";
+            // echo "-------------------------------------------------------------------------"."\r\n";
             // echo $rfq[1][0]."\r\n";
             // echo $rfq[1][1]."\r\n";
             // echo $rfq[1][3]."\r\n";
@@ -111,8 +117,8 @@ class CheckTest extends Command
     }
 
     public function hextostr($hex)
-    {  
-        return preg_replace_callback('/\\\x([0-9a-fA-F]{2})/', function($matches) { 
+    {
+        return preg_replace_callback('/\\\x([0-9a-fA-F]{2})/', function($matches) {
             return chr(hexdec($matches[1]));
         }, $hex);
     }

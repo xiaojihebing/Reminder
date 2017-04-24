@@ -49,27 +49,28 @@ class CheckRfq extends Command
                 //待采集的目标页面
                 $url = 'https://sourcing.alibaba.com/rfq_search_list.htm?searchText='.str_replace(' ','+',$task->keyword).'&recently=Y';
                 preg_match_all('/data.push\(([\s\S]*?)\)\;/i', file_get_contents($url), $lists);
-        
-                // $a = 0;
+
                 foreach($lists[1] as $li){
                     preg_match_all('/:(.*?),\r/i', str_replace(["\"", "decodeEntities", "(", ")"],"", $li), $result);
-                    preg_match('/\d{10}/i', $result[1][11], $rfq_id);
-
-                    if (!Rfq::where('rfq_id', $rfq_id[0])->first()) {
-                        echo $rfq_id[0]."\r\n";
-                        echo "http:".trim($result[1][0])."\r\n";
-                        echo trim(strip_tags($result[1][1]))."\r\n";
-                        echo trim(strip_tags($this->hextostr($result[1][3])))."\r\n";
-                        echo $result[1][4]."\r\n";
-                        echo $result[1][6].$result[1][7]."\r\n";
+                    // preg_match('/\d{10}/i', $result[1][11], $rfq_id);
+                    $rfq_id = trim(str_replace(['\x2d','\x2a'], ['-','*'], $result[1][1]));
+                    // echo $rfq_id."\r\n";
+                    if (!Rfq::where('rfq_id', substr($rfq_id,0,24))->first()) {
+                        // echo $rfq_id."\r\n";
+                        // echo substr($rfq_id,0,24)."\r\n";
+                        // echo trim(strip_tags($result[1][2]))."\r\n";
+                        // echo trim(strip_tags($this->hextostr($result[1][4])))."\r\n";
+                        // echo $result[1][5]."\r\n";
+                        // echo $result[1][7].$result[1][8]."\r\n";
+                        // echo $result[1][9]."\r\n";
 
                         $rfq = new Rfq;
-                        $rfq->rfq_id = $rfq_id = $rfq_id[0];
-                        $rfq->title = $title = trim(strip_tags($result[1][1]));
-                        $rfq->desc = $content = trim(strip_tags($this->hextostr($result[1][3])));
-                        $rfq->quantity = $quantity = $result[1][6]." ".$result[1][7];
-                        $rfq->postdate = $result[1][8];
-                        $rfq->country = $country = $result[1][4];
+                        $rfq->rfq_id = substr($rfq_id,0,24);
+                        $rfq->title = $title = trim(strip_tags($result[1][2]));
+                        $rfq->desc = $content = trim(strip_tags($this->hextostr($result[1][4])));
+                        $rfq->quantity = $quantity = $result[1][7]." ".$result[1][8];
+                        $rfq->postdate = $result[1][9];
+                        $rfq->country = $country = $result[1][5];
                         $rfq->reached = "Reached";
                         $rfq->related = $task->keyword;
                         $rfq->save();

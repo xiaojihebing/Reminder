@@ -10,7 +10,7 @@
   <p></p>
   <p>{{ $content }}</p>
   <p></p>
-  <p><a href="http://sourcing.alibaba.com/rfq_detail.htm?id={{ $rfq_id }}" target="_blank">点击查看</a></p>
+  <p><a href="https://sourcing.alibaba.com/rfq_detail.htm?p={{ $rfq_id }}" target="_blank">点击查看</a></p>
   <p></p>
 </body>
 </html>

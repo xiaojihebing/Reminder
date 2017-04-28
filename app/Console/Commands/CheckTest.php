@@ -44,9 +44,34 @@ class CheckTest extends Command
         // $res= file_get_contents($url);
         preg_match_all('/data.push\(([\s\S]*?)\)\;/i', file_get_contents($url), $lists);
         $i = 1;
+        $postdate = '2017-04-19';
+        $content = "00000";
+
+        // if (2>1 && 3>2 && 4>3) {
+        //     echo "true";
+        // }
+        // die;
+
+        $rfq = RFQ::where('title', 'High Speed 18Gbps Braided Cord 2.0 HDMI Cable 6FT with Ethernet Audio Return')->orderBy('id', 'desc')->first();
+        if (RFQ::where('title', 'Braided Cord 2.0 HDMI Cable 6FT with Ethernet Audio Return')->first()) {
+            echo "true"."\r\n";
+        }
+        var_dump($rfq->desc);
+        var_dump($rfq->desc=="Connector Type:HDMI Shielding:Combination Gender:Male-Male Available Length:up to 50m Optional AWG:24/26/28/30/32 AWG Data Transfer Rate:18 Gbps Max Version Available:1.3/1.4/2.0V Jacket:PVC/Nylon ...");
+        var_dump('2017-04-26' == $rfq->postdate);
+
+        if ($rfq->desc!=$content && $rfq->postdate==$postdate){
+            echo "true";
+        }
+
+        
+
+        // print_r(RFQ::where('title', 'hdmi cable')->first()->postdate);die;
+
+        
 
         // print_r($lists);die;
-
+        die;
         foreach($lists[1] as $li){
 
             preg_match_all('/:(.*?),\r/i', str_replace(["\"", "decodeEntities", "(", ")"],"", $li), $rfq);

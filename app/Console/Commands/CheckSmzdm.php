@@ -41,17 +41,19 @@ class CheckSmzdm extends Command
      */
     public function handle()
     {
-        $tasks = Smzdmtask::where('status', 1)->get();
-        $a = 0;
+        $tasks = Smzdmtask::where('status', 1)->get();        
         foreach($tasks as $task){
             if ((time()-strtotime($task->updated_at)) > $task->rate) {
                 // echo $task->name . "\r\n";
+                $a = 0;
+                $b = "";
                 $url = "https://api.smzdm.com/v1/list?keyword=&type=home&category_id=&brand_id=&mall_id=183&order=time&day=&limit=10&offset=0&f=android&v=360&weixin=1";
                 $res= file_get_contents($task->rurl);
                 $res = json_decode($res, true);
                 //error_code
                 if ($res['error_code'] != 0) {
                     //推送到队列
+                    $b = $b."查询出错----";
                     $data = [
                     'tmpl'=>'emails.error',
                     'subject'=>'smzdm查询出错啦',
@@ -62,6 +64,7 @@ class CheckSmzdm extends Command
                     dispatch($job);
                 } else {
                     echo count($res['data']['rows']) . "\r\n";
+                    $b = $b."查询到".count($res['data']['rows'])."个结果----";
                     foreach($res['data']['rows'] as $article){
                         // $m = Smzdm::where('pid', $article['article_id'])->first();
                         // $n = $article['article_channel_id'] < 6;
@@ -74,6 +77,8 @@ class CheckSmzdm extends Command
                             $smzdm->mall = $mall = $article['article_mall'];
                             $smzdm->pdate = $pdate = $article['article_format_date'];
                             $smzdm->save();
+
+                            $b = $b."New Msg:".$pid."----";
 
                             //推送到队列
                             $subject = "[" . $task->name . "]" . $price;
@@ -88,6 +93,7 @@ class CheckSmzdm extends Command
                             ];
                             $job = new SendReminderEmail($data);
                             dispatch($job);
+                            $b = $b."Sent New Msg:".$pid."----";
                             ++$a;
                         } else {
                             continue;
@@ -95,10 +101,10 @@ class CheckSmzdm extends Command
                     }
                 }
                 //更新此次查询时间
+                $task->result = $b;
                 $task->updated_at = time();
                 $task->save();
             }
         }
-        echo $a;
     }
 }

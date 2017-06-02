@@ -41,7 +41,9 @@ class CheckTest extends Command
      */
     public function handle()
     {
-        $title = "data cable";
+        $title = "data \"cable";
+        echo $title;
+        echo str_replace('"', '', $title);die;
         $rfql = Rfq::orderBy('id', 'DESC')->where('title', $title)->first();
         echo $rfql->id;
     }

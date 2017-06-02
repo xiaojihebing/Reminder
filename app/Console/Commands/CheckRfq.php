@@ -52,7 +52,7 @@ class CheckRfq extends Command
 
                 foreach($lists[1] as $li){
                     // $li = str_replace(['\x2d','\x2a','\x20','\x3c','\x3e','\x2f'], ['-','*','<','>','/'], $li);
-                    preg_match_all('/:(.*?),\r/i', $li, $result);
+                    preg_match_all('/:(.*?),\r/i', str_replace('"', '', $li), $result);
                     // preg_match('/\d{10}/i', $result[1][11], $rfq_id);
                     
                     $title = trim(strip_tags($this->hextostr($result[1][2])));

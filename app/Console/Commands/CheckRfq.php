@@ -51,14 +51,15 @@ class CheckRfq extends Command
                 preg_match_all('/data.push\(([\s\S]*?)\)\;/i', file_get_contents($url), $lists);
 
                 foreach($lists[1] as $li){
-                    preg_match_all('/:(.*?),\r/i', str_replace(["\"", "decodeEntities", "(", ")"],"", $li), $result);
+                    // $li = str_replace(['\x2d','\x2a','\x20','\x3c','\x3e','\x2f'], ['-','*','<','>','/'], $li);
+                    preg_match_all('/:(.*?),\r/i', $li, $result);
                     // preg_match('/\d{10}/i', $result[1][11], $rfq_id);
                     
-                    $title = trim(strip_tags($result[1][2]));
-                    $content = trim(strip_tags($this->hextostr($result[1][4])));
-                    // $postdate = $result[1][9];
+                    $title = trim(strip_tags($this->hextostr($result[1][2])));
+                    // $content = trim(strip_tags($this->hextostr($result[1][4])));
+                    $postdate = $result[1][9];
 
-                    $rfql = RFQ::where('title', $title)->where('desc', $content)->first();
+                    $rfql = RFQ::orderBy('id', 'DESC')->where('title', $title)->where('postdate', $postdate)->first();
                     
                     if ($rfql) {
                         continue;
@@ -70,13 +71,13 @@ class CheckRfq extends Command
                         // echo $result[1][5]."\r\n";
                         // echo $result[1][7].$result[1][8]."\r\n";
                         // echo $result[1][9]."\r\n";
-                        $rfq_id = trim(str_replace(['\x2d','\x2a'], ['-','*'], $result[1][1]));
+                        // $rfq_id = trim(str_replace(['\x2d','\x2a'], ['-','*'], $result[1][1]));
                         // echo $rfq_id."\r\n";
 
                         $rfq = new Rfq;
-                        $rfq->rfq_id = $rfq_id;
+                        $rfq->rfq_id = $rfq_id = trim(str_replace(['\x2d','\x2a'], ['-','*'], $result[1][1]));
                         $rfq->title = $title;
-                        $rfq->desc = $content;
+                        $rfq->desc = $content = trim(strip_tags($this->hextostr($result[1][4])));
                         $rfq->quantity = $quantity = $result[1][7]." ".$result[1][8];
                         $rfq->postdate = $result[1][9];
                         $rfq->country = $country = $result[1][5];

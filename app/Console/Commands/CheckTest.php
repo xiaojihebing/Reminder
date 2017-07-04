@@ -41,11 +41,20 @@ class CheckTest extends Command
      */
     public function handle()
     {
-        $title = "data \"cable";
-        echo $title;
-        echo str_replace('"', '', $title);die;
-        $rfql = Rfq::orderBy('id', 'DESC')->where('title', $title)->first();
-        echo $rfql->id;
+        //推送到队列
+        //$subject = "[" . $task->name . "]" . $price;
+        $data = [
+        'tmpl'=>'emails.smzdm',
+        'pid'=>'43435435',
+        'title'=>'this is Title',
+        'subject'=>'This is subject',
+        'mall'=>'This is Mall',
+        'pdate'=>'This is Pdate',
+        'mail_to'=>'gongxi@sooga.cn'
+        ];
+        $job = new SendReminderEmail($data);
+        dispatch($job);
+        echo "success";
     }
 
     public function hextostr($hex)

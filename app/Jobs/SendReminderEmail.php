@@ -41,7 +41,7 @@ class SendReminderEmail implements ShouldQueue
         // $data = ['title'=>$this->title, 'content'=>$this->content, 'rfq_id'=>$this->rfq_id];
         $data = $this->data;
         Mail::send($data['tmpl'], $data, function ($message) use($data){
-            $message->from('16655376@qq.com', 'Reminder');
+            $message->from('service@sooga.cn', 'Reminder');
             $message->subject($data['subject']);
             $message->to($data['mail_to']);
         });

@@ -7,6 +7,7 @@ use GuzzleHttp\Client;
 use App\Lantouzi;
 use Mail;
 use Illuminate\Console\Command;
+use App\Jobs\SendReminderEmail;
 
 class CheckLan extends Command
 {
@@ -44,18 +45,21 @@ class CheckLan extends Command
         //待采集的目标页面
         // $url = 'https://lantouzi.com/api/bianxianjihua/datalist?page=1&order=0&dir=1&tag=3';
         $client = new Client([
-            'base_uri' => 'https://lantouzi.com/api/bianxianjihua/datalist?page=1&order=0&dir=1&tag=0',
+            'base_uri' => 'https://lantouzi.com/api/bianxianjihua/datalist?page=1&order=0&dir=1&tag=1&subtag=0',
             'timeout'  => 3.0,
         ]);
         $response = $client->request('GET', '', [
             'headers' => [
                 'User-Agent'=> 'Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25',
                 'Accept'    => 'application/json, text/plain, */*',
-                'Referer'   => 'https://lantouzi.com/bianxianjihua/mobile_list?order=0&dir=1&tag=0'
+                'Referer'   => 'https://lantouzi.com/bianxianjihua/mobile_list?order=0&dir=1&tag=1'
             ]
         ]);
+        $res = iconv('UTF-8', 'UTF-8//IGNORE', utf8_encode($response->getBody()));
+        // echo json_encode($res,true);die;
 
-        $result = json_decode($response->getBody(), true);
+        $result = json_decode($res, true);
+        // echo count($result['data']['items']);die;
         $a = 0;
         foreach ($result['data']['items'] as $key => $value) {
             $m = $value['rate'];
@@ -83,7 +87,9 @@ class CheckLan extends Command
                 'buy_url'=>$value['buy_url'], 
                 'mail_to'=>'gongxi@sooga.cn'
                 ];
-                $this->SendEmail($data);
+                echo $subject;
+                $job = new SendReminderEmail($data);
+                dispatch($job);
             }
         }
         echo $a;

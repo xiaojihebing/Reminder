@@ -78,7 +78,7 @@ class CheckRfq extends Command
                         $rfq->rfq_id = $rfq_id = trim(str_replace(['\x2d','\x2a'], ['-','*'], $result[1][1]));
                         $rfq->title = $title;
                         $rfq->desc = $content = trim(strip_tags($this->hextostr($result[1][4])));
-                        $rfq->quantity = $quantity = $result[1][7]." ".$result[1][8];
+                        $rfq->quantity = $quantity = $result[1][7]." ".$this->hextostr($result[1][8]);
                         $rfq->postdate = $result[1][9];
                         $rfq->country = $country = $result[1][5];
                         $rfq->reached = "Reached";
@@ -95,7 +95,7 @@ class CheckRfq extends Command
                         'subject'=>$subject,
                         'content'=>$content,
                         'country'=>$country,
-                        'mail_to'=>'service@shujiachina.com'
+                        'mail_to'=>'rfq@shujiachina.com'
                         ];
                         $job = new SendReminderEmail($data);
                         dispatch($job);

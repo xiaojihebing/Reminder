@@ -57,9 +57,11 @@ class CheckRfq extends Command
                     
                     $title = trim(strip_tags($this->hextostr($result[1][2])));
                     // $content = trim(strip_tags($this->hextostr($result[1][4])));
-                    $postdate = $result[1][9];
+                    $country = $result[1][5];
+                    $count = RFQ::all()->count();
 
-                    $rfql = RFQ::orderBy('id', 'DESC')->where('title', $title)->where('postdate', $postdate)->first();
+                    $rfql = RFQ::where('id','>', $count-500)->where('title', $title)->where('country', $country)->first();
+                    //Carbon::now()->subDays(25)
                     
                     if ($rfql) {
                         continue;

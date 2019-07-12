@@ -51,7 +51,7 @@ class CheckTest extends Command
         'tmpl'=>'emails.test',
         'subject'=>'This is a subjuect',
         'content'=>'This is content',
-        'mail_to'=>'gongxi@sooga.cn'
+        'mail_to'=>'rfq@hihometech.cn'
         ];
         $job = new SendReminderEmail($data);
         dispatch($job);

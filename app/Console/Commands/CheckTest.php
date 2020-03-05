@@ -71,11 +71,11 @@ class CheckTest extends Command
             //$rfql = RFQ::where('id','>', $count-500)->where('title', $title)->where('country', $country)->first();
             
             echo $rfq_id = trim(str_replace(['\x2d','\x2a'], ['-','*'], $result[1][1]));
-            echo $title = trim(strip_tags($this->hextostr($result[1][2])));
-            echo $content = trim(strip_tags($this->hextostr($result[1][4])));
-            echo $quantity = $result[1][7]." ".$this->hextostr($result[1][8]);
-            echo $result[1][9];
-            echo $country = $result[1][5];
+            echo $title = trim(strip_tags($this->hextostr($result[1][3])));
+            echo $content = trim(strip_tags($this->hextostr($result[1][5])));
+            echo $quantity = $result[1][8]." ".$this->hextostr($result[1][9]);
+            echo $result[1][10];
+            echo $country = $result[1][6];
             echo "Reached";
             echo "\n";
         }

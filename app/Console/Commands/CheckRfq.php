@@ -55,9 +55,9 @@ class CheckRfq extends Command
                     preg_match_all('/:(.*?),\r/i', str_replace('"', '', $li), $result);
                     // preg_match('/\d{10}/i', $result[1][11], $rfq_id);
                     
-                    $title = trim(strip_tags($this->hextostr($result[1][2])));
+                    $title = trim(strip_tags($this->hextostr($result[1][3])));
                     // $content = trim(strip_tags($this->hextostr($result[1][4])));
-                    $country = $result[1][5];
+                    $country = $result[1][6];
                     $count = RFQ::all()->count();
 
                     $rfql = RFQ::where('id','>', $count-500)->where('title', $title)->where('country', $country)->first();
@@ -79,10 +79,10 @@ class CheckRfq extends Command
                         $rfq = new Rfq;
                         $rfq->rfq_id = $rfq_id = trim(str_replace(['\x2d','\x2a'], ['-','*'], $result[1][1]));
                         $rfq->title = $title;
-                        $rfq->desc = $content = trim(strip_tags($this->hextostr($result[1][4])));
-                        $rfq->quantity = $quantity = $result[1][7]." ".$this->hextostr($result[1][8]);
-                        $rfq->postdate = $result[1][9];
-                        $rfq->country = $country = $result[1][5];
+                        $rfq->desc = $content = trim(strip_tags($this->hextostr($result[1][5])));
+                        $rfq->quantity = $quantity = $result[1][8]." ".$this->hextostr($result[1][9]);
+                        $rfq->postdate = $result[1][10];
+                        $rfq->country = $country = $result[1][6];
                         $rfq->reached = "Reached";
                         $rfq->related = $task->keyword;
                         $rfq->save();

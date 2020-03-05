@@ -77,7 +77,7 @@ class CheckRfq extends Command
                         // echo $rfq_id."\r\n";
 
                         $rfq = new Rfq;
-                        $rfq->rfq_id = $rfq_id = trim(str_replace(['\x2d','\x2a'], ['-','*'], $result[1][1]));
+                        $rfq->rfq_id = $result[1][1];
                         $rfq->title = $title;
                         $rfq->desc = $content = trim(strip_tags($this->hextostr($result[1][5])));
                         $rfq->quantity = $quantity = $result[1][8]." ".$this->hextostr($result[1][9]);
@@ -89,6 +89,7 @@ class CheckRfq extends Command
                         // echo $result[0] ."\r\n";
 
                         //推送到队列
+                        $rfq_id = trim(str_replace(['\x2d','\x2a'], ['-','*'], $result[1][2]));
                         $subject = "[" . $quantity . "]" . $title;
 
                         $data = [
